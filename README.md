@@ -12,44 +12,36 @@
 
 
 ##How to use:
-    ```
     import psycopg2
     db = psycopg2.connect(database='databaseName')
     c = db.cursor()
     c.execute(query)
     data = c.fetchall()
-    ```
 
-    to write in file ->
-        ```
+    to write in file :
         with open('output.txt', 'w') as out:
             out.write("Type some thing here")
-        ```
 
 
 
 ##Example:
-    this function return list of tuple of all colums data from toparticles table . 
-    ```
+this function return list of tuple of all colums data from toparticles table . 
     def most_popular_articles():
         query = "select * from toparticles limit 3;"
         c.execute(query)
         data = c.fetchall()
         return data
-    ```
+
 
 ##Creat views:
-    1) ```
+    1) 
     create view toparticles as select articles.title, count(*) as view from articles, log where path like '%' || slug || '%' and status = '200 OK' group by articles.title order by view desc;
-    ```
     
-    2) ```
+    2)
     create view popular as select A.title,authors.name as author,view from (select toparticles.title, articles.author, view from toparticles ,articles where toparticles.title = articles.title order by view desc) as A, authors where A.author = authors.id;
-    ```
 
-    3) ```
+    3) 
     create view error as select (cast(count(status) as decimal)/(select count(method) as method from log))*100 as error,date_trunc('day', time) as date from log group by date_trunc('day', time) order by error desc;
-    ```
 
 
 ##Run Program:
